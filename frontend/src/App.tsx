@@ -1,35 +1,31 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
+import { NewUserForm } from './components/NewUserForm'
+import { GET_USERS } from './services'
 
 type User = {
   id: string
   name: string
 }
 
-const GET_USER = gql`
-  query {
-    users {
-      id
-      name
-    }
-  }
-`
-
 function App() {
-  const { data, loading } = useQuery<{ users: User[] }>(GET_USER)
+  const { data, loading } = useQuery<{ users: User[] }>(GET_USERS)
 
   if (loading) {
     return <p>Carregando ...</p>
   }
 
   return (
-    <>
-      <h1>Usuários</h1>
+    <div>
+      <h1>Listagem de Usuários</h1>
+
       <ul>
         {data?.users.map((user) => (
           <li key={user.id}>{user.name}</li>
         ))}
       </ul>
-    </>
+
+      <NewUserForm />
+    </div>
   )
 }
 
