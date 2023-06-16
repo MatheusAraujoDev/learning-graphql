@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --exit-child src/index.ts localhost 3001",
+    "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --exit-child src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
