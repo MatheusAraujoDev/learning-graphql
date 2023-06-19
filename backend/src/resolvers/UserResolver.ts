@@ -31,7 +31,17 @@ export class UserResolver {
 
     const updatedUser = { ...this.data[userIndex], name }
     this.data[userIndex] = updatedUser
-    console.log('updatedUser', updatedUser)
     return updatedUser
+  }
+
+  @Mutation(() => User)
+  async deleteUser(@Arg('id') id: string) {
+    const userIndex = this.data.findIndex((user) => user.id === id)
+    if (userIndex === -1) {
+      throw new Error('Usuário não encontrado')
+    }
+
+    const deletedUser = this.data.splice(userIndex, 1)[0]
+    return deletedUser || null
   }
 }

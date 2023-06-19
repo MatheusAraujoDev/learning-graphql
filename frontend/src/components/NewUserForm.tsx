@@ -12,7 +12,7 @@ export function NewUserForm() {
     event.preventDefault()
 
     if (!name) {
-      return
+      return alert('Esse campo não pode estar vazio!')
     }
 
     await createUser({

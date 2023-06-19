@@ -1,8 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { AiFillEdit, AiOutlineDelete } from 'react-icons/ai'
+import Swal from 'sweetalert2'
 import { NewUserForm } from './components/NewUserForm'
-import { EDIT_USER, GET_USERS } from './services'
+import { DELETE_USER, EDIT_USER, GET_USERS } from './services'
 
 type User = {
   id: string
@@ -16,6 +17,7 @@ function App() {
   const { data, loading } = useQuery<{ users: User[] }>(GET_USERS)
 
   const [editUser] = useMutation(EDIT_USER)
+  const [deleteUser] = useMutation(DELETE_USER)
 
   if (loading) {
     return <p>Carregando ...</p>
@@ -41,6 +43,32 @@ function App() {
 
     setNewUserName('')
     setOpenInput(false)
+  }
+
+  async function handleDeleteUser(userID: string) {
+    Swal.fire({
+      title: 'Deseja realmente deletar esse usuário?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: `Cancelar`,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Usuário deletado com sucesso!',
+          icon: 'success',
+        })
+
+        deleteUser({
+          variables: { id: userID },
+          refetchQueries: [GET_USERS],
+        }).catch((error) => console.log('Erro ao deletar usuário: ', error))
+      } else if (result.isDenied) {
+        Swal.fire('As alterações não foram salvas!')
+      }
+    })
   }
 
   return (
@@ -83,6 +111,7 @@ function App() {
                 marginLeft: '5px',
               }}
               color={'#e00909'}
+              onClick={() => handleDeleteUser(user.id)}
             />
           </li>
         ))}
