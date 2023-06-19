@@ -1,17 +1,8 @@
 /* eslint-disable no-useless-return */
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { FormEvent, useState } from 'react'
 import { client } from '../lib/apollo'
-import { GET_USERS } from '../services'
-
-const CREATE_USER = gql`
-  mutation ($name: String!) {
-    createUser(name: $name) {
-      id
-      name
-    }
-  }
-`
+import { CREATE_USER, GET_USERS } from '../services'
 
 export function NewUserForm() {
   const [name, setName] = useState('')
@@ -28,7 +19,6 @@ export function NewUserForm() {
       variables: {
         name,
       },
-      // refetchQueries: [GET_USERS],
       update: (cache, { data: { createUser } }) => {
         const { users } = client.readQuery({ query: GET_USERS })
 
@@ -53,6 +43,7 @@ export function NewUserForm() {
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        placeholder="Adicione um Usuário"
       />
 
       <button type="submit">Enviar</button>

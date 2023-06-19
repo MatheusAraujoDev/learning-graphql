@@ -21,4 +21,17 @@ export class UserResolver {
     this.data.push(user)
     return user
   }
+
+  @Mutation(() => User)
+  async editUser(@Arg('id') id: string, @Arg('name') name: string) {
+    const userIndex = this.data.findIndex((user) => user.id === id)
+    if (userIndex === -1) {
+      throw new Error('Usuário não encontrado')
+    }
+
+    const updatedUser = { ...this.data[userIndex], name }
+    this.data[userIndex] = updatedUser
+    console.log('updatedUser', updatedUser)
+    return updatedUser
+  }
 }
